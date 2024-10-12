@@ -1,0 +1,39 @@
+<div class="ocr-popup-overlay" (click)="closePopup()">
+  <div class="ocr-popup-content" (click)="$event.stopPropagation()">
+    <h2 class="popup-title">{{ getPopupTitle() }}</h2>
+    <div *ngIf="!selectedImage" class="upload-area"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave($event)"
+         (drop)="onDrop($event)">
+      <input type="file" (change)="onFileSelected($event)" accept="image/jpeg,image/jpg,image/png" id="ocr-file-upload" style="display: none;">
+      <label for="ocr-file-upload" class="upload-label">
+        <div class="upload-icon">
+          <img src="assets/images/upload-icon.png" alt="Upload Icon">
+        </div>
+        <p>Drag & Drop<br>or browse</p>
+        <span>Supports: JPEG, JPG, PNG</span>
+      </label>
+    </div>
+    <div *ngIf="selectedImage && !isProcessing && !ocrResult" class="image-preview">
+      <div class="image-container">
+        <img [src]="selectedImage" alt="Selected Image" class="preview-image">
+        <div class="remove-image-container">
+          <img src="assets/images/cross.png" alt="Remove" (click)="removeImage()" class="remove-image">
+        </div>
+      </div>
+      <button (click)="processImage()">Process Image</button>
+    </div>
+    <div *ngIf="isProcessing" class="processing">
+      <img src="assets/images/loader.gif" alt="Processing">
+    </div>
+    <div *ngIf="ocrResult" class="ocr-result">
+      <div class="result-image">
+        <img [src]="selectedImage" alt="Processed Image" class="preview-image">
+      </div>
+      <h3 class="result-title">OCR Result</h3>
+      <div class="result-text">
+        <p>{{ ocrResult }}</p>
+      </div>
+    </div>
+  </div>
+</div>

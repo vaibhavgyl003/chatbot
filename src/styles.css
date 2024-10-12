@@ -1,0 +1,480 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: rgb(0, 167, 111);
+}
+
+.chatbot-toggler {
+  position: fixed;
+  bottom: 30px;
+  right: 35px;
+  outline: none;
+  border: none;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: white;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.chat-container {
+  position: fixed;
+  right: 90px;
+  bottom: 30px;
+  width: 100%;
+  max-width: 480px;
+  height: calc(100% - 90px);
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+  transform-origin: bottom right;
+  box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1),
+              0 32px 64px -48px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.chat-container.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+header {
+  padding: 5px;
+  position: relative;
+  text-align: center;
+  color: #fff;
+  background: rgb(0, 167, 111);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  height: 100px;
+  width: 100px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.logo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.logo-header {
+  height: 50px;
+  width: 50px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.title-section {
+  text-align: center;
+}
+
+.title-section h1 {
+  font-size: 1.5em;
+  padding-top: 15px;
+  color: rgb(33, 43, 54);
+  margin: 30;
+  font-family: "Public Sans", Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.title-section p {
+  font-size: 1em;
+  color: rgb(99, 115, 129);
+  margin: 0;
+  font-family: "Public Sans", Helvetica, sans-serif;
+}
+
+header h1 {
+  font-size: revert;
+  margin: 0;
+  color: rgb(255, 255, 255);
+  font-family: "Public Sans", Helvetica, sans-serif;
+}
+
+header p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+main {
+  overflow-y: auto;
+  height: calc(100% - 60px);
+  padding: 30px 20px 20px;
+  background: #f8f8f8;
+  border-top: 1px solid #ddd;
+}
+
+.chat-container :where(main, textarea)::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container :where(main, textarea)::-webkit-scrollbar-track {
+  background: #fff;
+  border-radius: 25px;
+}
+
+.chat-container :where(main, textarea)::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 25px;
+}
+
+.chat-history {
+  max-width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+}
+
+.message {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+
+.message.user {
+  justify-content: flex-end;
+  text-align: -webkit-match-parent;
+}
+
+.message.user:before {
+  content: "\f007";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 10px;
+  color: #007bff;
+  align-self: center;
+}
+
+.message.assistant {
+  justify-content: flex-start;
+  text-align: -webkit-match-parent;
+}
+
+.message.assistant:before {
+  content: "\f086";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 10px;
+  color: #76c893;
+  align-self: center;
+}
+
+.message-content {
+  max-width: 90%;
+  padding: 12px 20px;
+  border-radius: 15px;
+  background-color: rgb(216 246 232);
+  position: relative;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+/* Add styles for table */
+/* Ensure the table fits within the message content area */
+.message-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 14px;
+  text-align: left;  /* Ensure text alignment is consistent */
+}
+
+/* Style for table headers */
+.message-content th {
+  background-color: #f2f2f2;  /* Light grey background for headers */
+  border: 1px solid #ddd;  /* Light border */
+  padding: 8px;  /* Padding inside cells */
+  font-weight: 600;  /* Bold text for headers */
+}
+
+/* Style for table cells */
+.message-content td {
+  border: 1px solid #ddd;  /* Light border */
+  padding: 8px;  /* Padding inside cells */
+}
+
+/* Alternating row colors for better readability */
+.message-content tr:nth-child(even) {
+  background-color: #f9f9f9;  /* Slightly darker background for even rows */
+}
+
+/* Hover effect for table rows */
+.message-content tr:hover {
+  background-color: #f1f1f1;  /* Highlight row on hover */
+}
+
+/* Ensure the table is responsive */
+.message-content table {
+  display: block;
+  overflow-x: auto;  /* Allow horizontal scrolling if needed */
+  white-space: nowrap;
+}
+
+/* Optional: Add styles for bold and italic text */
+.message-content b, .message-content strong {
+  font-weight: bold;
+}
+
+.message-content i, .message-content em {
+  font-style: italic;
+}
+
+/* Optional: Ensure links are styled */
+.message-content a {
+  color: #007bff;  /* Link color */
+  text-decoration: none;
+}
+
+.message-content a:hover {
+  text-decoration: underline;  /* Underline on hover */
+}
+
+
+button {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 490px) {
+  .chatbot-toggler {
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .chat-container {
+    right: 20px;
+    bottom: 20px;
+    height: 80%;
+    border-radius: 0;
+    width: calc(100% - 40px);
+  }
+
+  main {
+    height: calc(100% - 60px);
+    padding: 25px 15px 20px;
+  }
+
+  footer {
+    padding: 5px 15px;
+  }
+
+  header span {
+    display: block;
+  }
+}
+
+.message img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
+
+.mode-toggle button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.text-mode-image {
+  height: 30px;
+}
+
+.image-mode-image {
+  height: 30px;
+}
+.ocr-mode-image {
+  height: 30px;
+}
+
+.mode-toggle button.active img {
+  border: 3px solid #f9ba1f;
+  border-radius: 5px;
+}
+
+.speaker-icon {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.speaker-icon:hover {
+  transform: scale(1.2);
+}
+
+.speaker-icon i {
+  font-size: 1.2em;
+  color: #ff6347;
+  transition: color 0.3s ease;
+}
+
+.speaker-icon:hover i {
+  color: #ff4500;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.input-section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  border: 2px solid #888;
+  border-radius: 25px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0);
+  width: 100%;
+  margin-right: 10px;
+  height: 70px;
+}
+
+.big-textbox {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0);
+  color: #888;
+  resize: none;
+  overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
+  max-height: 100%;
+  word-wrap: break-word;
+}
+
+.big-textbox::placeholder {
+  color: #888;
+}
+
+.send-icon, .mic-icon {
+  cursor: pointer;
+  margin-left: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.mic-icon {
+  margin-left: 5px;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-language select {
+  padding: 15px;
+  padding-right: 40px;
+  border-radius: 25px;
+  border: 2px solid #888;
+  background: rgba(255, 255, 255, 0.9) url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Google_Translate_logo.svg/2048px-Google_Translate_logo.svg.png') no-repeat right 10px center;
+  background-size: 20px;
+  color: #000000;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+}
+
+.select-language select:focus {
+  border-color: #278648;
+}
+
+.select-language select option {
+  padding: 10px;
+}
+
+.dropdown-icon {
+  display: none;
+}
+
+@media (max-width: 490px) {
+  footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .input-container {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .select-wrapper {
+    width: 100%;
+  }
+
+  .select-language select {
+    width: 100%;
+  }
+}

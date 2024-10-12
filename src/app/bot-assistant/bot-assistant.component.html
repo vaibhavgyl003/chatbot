@@ -1,0 +1,62 @@
+<div class="chatbot-toggler" (click)="toggleChatbot()" aria-label="Toggle Chatbot">
+  <i [class]="isChatbotVisible ? 'fas fa-times' : 'fas fa-robot'"></i>
+</div>
+
+<app-ocr-popup *ngIf="isOcrPopupVisible"
+               (close)="closeOcrPopup()">
+<!--  (imageProcessed)="handleOcrResult($event)"-->
+</app-ocr-popup>
+<div class="chat-container" [class.show]="isChatbotVisible">
+  <header>
+    <div class="mode-toggle">
+      <button [class.active]="responseMode === 'text'" (click)="setResponseMode('text')">
+        <img src="assets/images/Text_Mode.png" alt="Text Mode" class="text-mode-image">
+      </button>
+      <button [class.active]="responseMode === 'image'" (click)="setResponseMode('image')">
+        <img src="assets/images/Image_Mode.png" alt="Image Mode" class="image-mode-image">
+      </button>
+      <button (click)="openOcrPopup()">
+        <img src="assets/images/ocr_icon.png" alt="OCR Mode" class="ocr-mode-image">
+      </button>
+    </div>
+  </header>
+  <main>
+    <div class="chat-history">
+      <div class="title-section">
+        <img src='assets/images/bot-image.png' alt="Logo" class="logo" style="margin-bottom: -30px">
+        <h1>Concept AI</h1>
+        <p>Custom Solutions, Unique to You</p>
+      </div><br><br>
+      <div class="message" *ngFor="let message of chatHistory" [ngClass]="message.role">
+        <div class="message-content" [innerHTML]="message.content | safeHtml"></div>
+        <div class="speaker-icon"
+             *ngIf="message.role === 'assistant' && !message.content.includes('<img') && message.content !== 'working...'"
+             (click)="listenToResponse(message.content)">
+          <i class="fas fa-volume-up"></i>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="input-section">
+      <div class="input-container">
+        <div *ngIf="selectedImage" class="image-preview">
+          <img [src]="selectedImage" alt="Selected Image" style="max-width: 100px; max-height: 100px;">
+          <button (click)="removeSelectedImage()">X</button>
+        </div>
+        <textarea [(ngModel)]="userInput" placeholder="Type your query here" (keydown.enter)="sendMessage()" class="big-textbox"></textarea>
+        <img src="/assets/images/Sent.png" alt="Send" class="send-icon" (click)="sendMessage()">
+        <img src="/assets/images/Mic.png" alt="Mic" class="mic-icon" [class.recording]="isRecording" (click)="toggleRecording()">
+<!--        <label for="file-upload" class="file-upload-label">-->
+<!--          <img src="/assets/images/attachment_icon.jpg" alt="Attach" class="attach-icon" style="height: 25px; width: 25px; margin-left:5px; margin-top: 10px">-->
+<!--        </label>-->
+<!--        <input id="file-upload" type="file" (change)="handleFileUpload($event)" accept="image/*" style="display: none;">-->
+      </div>
+    </div>
+    <div class="mode-selector">
+      <button (click)="setResponseMode('text')" [class.active]="responseMode === 'text'">Text</button>
+      <button (click)="setResponseMode('image')" [class.active]="responseMode === 'image'">Image</button>
+    </div>
+  </footer>
+</div>
