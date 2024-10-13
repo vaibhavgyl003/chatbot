@@ -126,7 +126,7 @@ header p {
 main {
   overflow-y: auto;
   height: calc(100% - 60px);
-  padding: 30px 20px 20px;
+  padding: 30px 20px 30px 20px;
   background: #f8f8f8;
   border-top: 1px solid #ddd;
 }
@@ -155,7 +155,7 @@ main {
 
 .message {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   align-items: flex-start;
 }
 
@@ -176,6 +176,7 @@ main {
 .message.assistant {
   justify-content: flex-start;
   text-align: -webkit-match-parent;
+  margin-bottom: 30px;
 }
 
 .message.assistant:before {
@@ -388,14 +389,16 @@ footer {
 
 .input-container {
   display: flex;
-  align-items: center;
+  align-items: flex-end; /* Change from center to flex-end */
   border: 2px solid #888;
   border-radius: 25px;
   padding: 5px 10px;
   background: rgba(255, 255, 255, 0);
   width: 100%;
   margin-right: 10px;
-  height: 70px;
+  min-height: 70px; /* Change height to min-height */
+  max-height: 200px; /* Add a max-height to prevent excessive growth */
+  overflow: hidden; /* Hide overflow */
 }
 
 .big-textbox {
@@ -407,11 +410,26 @@ footer {
   background: rgba(255, 255, 255, 0);
   color: #888;
   resize: none;
-  overflow-y: auto;
-  height: 100%;
+  overflow-y: auto; /* Hide vertical overflow */
+  min-height: 50px; /* Set a minimum height */
+  max-height: 200px;
   box-sizing: border-box;
-  max-height: 100%;
   word-wrap: break-word;
+  line-height: 1.5; /* Add line-height for consistent text spacing */
+}
+
+.button-container {
+  position: absolute;
+  right: 10px; /* Adjust as needed */
+  bottom: 10px; /* Adjust as needed */
+  display: flex;
+  align-items: center;
+}
+
+.mic-icon.recording {
+  /* Add styles for when recording */
+  background-color: red; /* Example style */
+  border-radius: 50%;
 }
 
 .big-textbox::placeholder {

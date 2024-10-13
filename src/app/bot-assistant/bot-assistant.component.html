@@ -9,12 +9,12 @@
 <div class="chat-container" [class.show]="isChatbotVisible">
   <header>
     <div class="mode-toggle">
-      <button [class.active]="responseMode === 'text'" (click)="setResponseMode('text')">
+      <!-- <button [class.active]="responseMode === 'text'" (click)="setResponseMode('text')">
         <img src="assets/images/Text_Mode.png" alt="Text Mode" class="text-mode-image">
       </button>
       <button [class.active]="responseMode === 'image'" (click)="setResponseMode('image')">
         <img src="assets/images/Image_Mode.png" alt="Image Mode" class="image-mode-image">
-      </button>
+      </button> -->
       <button (click)="openOcrPopup()">
         <img src="assets/images/ocr_icon.png" alt="OCR Mode" class="ocr-mode-image">
       </button>
@@ -45,7 +45,14 @@
           <img [src]="selectedImage" alt="Selected Image" style="max-width: 100px; max-height: 100px;">
           <button (click)="removeSelectedImage()">X</button>
         </div>
-        <textarea [(ngModel)]="userInput" placeholder="Type your query here" (keydown.enter)="sendMessage()" class="big-textbox"></textarea>
+        <textarea 
+        #userInputTextarea
+        [(ngModel)]="userInput" 
+        placeholder="Type your query here" 
+        (keydown)="handleKeyDown($event)" 
+        (input)="onInput()"
+        class="big-textbox">
+        </textarea>
         <img src="/assets/images/Sent.png" alt="Send" class="send-icon" (click)="sendMessage()">
         <img src="/assets/images/Mic.png" alt="Mic" class="mic-icon" [class.recording]="isRecording" (click)="toggleRecording()">
 <!--        <label for="file-upload" class="file-upload-label">-->
@@ -55,8 +62,8 @@
       </div>
     </div>
     <div class="mode-selector">
-      <button (click)="setResponseMode('text')" [class.active]="responseMode === 'text'">Text</button>
-      <button (click)="setResponseMode('image')" [class.active]="responseMode === 'image'">Image</button>
+      <!-- <button (click)="setResponseMode('text')" [class.active]="responseMode === 'text'">Text</button>
+      <button (click)="setResponseMode('image')" [class.active]="responseMode === 'image'">Image</button> -->
     </div>
   </footer>
 </div>

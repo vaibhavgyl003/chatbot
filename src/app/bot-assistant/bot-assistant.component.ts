@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { AudioService } from '../services/audio.service';
 import { OpenAiService } from '../services/openai.service';
 import { TextToSpeechService } from '../services/text-to-speech.service';
@@ -8,15 +8,16 @@ interface ChatMessage {
   content: string;
   imageUrl?: string;
 }
+
 @Component({
   selector: 'app-bot-assistant',
   templateUrl: './bot-assistant.component.html',
   styleUrls: ['./bot-assistant.component.css'],
 })
+export class BotAssistantComponent implements AfterViewInit {
+  @ViewChild('userInputTextarea') userInputTextarea!: ElementRef<HTMLTextAreaElement>;
 
-export class BotAssistantComponent {
   isRecording = false;
-  // chatHistory: { role: string; content: string }[] = [];
   chatHistory: ChatMessage[] = [];
   userInput: string = '';
   selectedLanguage: string = 'en';
@@ -25,17 +26,38 @@ export class BotAssistantComponent {
   selectedImage: string | null = null;
   isOcrPopupVisible = false;
 
-
   constructor(
     private audioService: AudioService,
     private openAiService: OpenAiService,
     private textToSpeechService: TextToSpeechService
   ) {}
 
+  ngAfterViewInit() {
+    this.adjustTextareaHeight();
+  }
+
+  adjustTextareaHeight() {
+    const textarea = this.userInputTextarea.nativeElement;
+    const container = textarea.closest('.input-container') as HTMLElement;
+
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+
+    if (container) {
+      container.style.height = 'auto';
+      container.style.height = `${container.scrollHeight}px`;
+    }
+  }
+
+  onInput() {
+    this.adjustTextareaHeight();
+  }
+
   toggleChatbot() {
     this.isChatbotVisible = !this.isChatbotVisible;
     document.body.classList.toggle('show-chatbot');
   }
+
   openOcrPopup() {
     this.isOcrPopupVisible = true;
     this.isChatbotVisible = !this.isChatbotVisible;
@@ -74,6 +96,7 @@ export class BotAssistantComponent {
     );
     await this.getChatResponse(transcribedText);
   }
+
   handleFileUpload(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -102,6 +125,7 @@ export class BotAssistantComponent {
       const imageCopy = this.selectedImage;
       this.selectedImage = null;
       await this.getChatResponse(userMessage.content, imageCopy);
+      this.adjustTextareaHeight();
     }
   }
 
@@ -125,7 +149,6 @@ export class BotAssistantComponent {
         if (imageData) {
           console.log(imageData)
           response = await this.openAiService.analyzeImage(imageData, userMessage);
-
         } else {
           response = await this.openAiService.getChatResponse(userMessage, this.chatHistory);
         }
@@ -170,9 +193,6 @@ export class BotAssistantComponent {
       role: 'user',
       content: `<img src="${imageUrl}" alt="Uploaded Image" style="max-width: 100%; height: auto;" />`,
     });
-    // You can add logic here to send the image to OpenAI for analysis if needed
-    // For example:
-    // this.analyzeImage(imageUrl);
   }
 
   splitResponse(response: string): [string, string, string] {
@@ -214,6 +234,7 @@ export class BotAssistantComponent {
 
     rows.forEach(row => {
       if (row !== '') {
+        html += '';
         html += '<tr>';
         row.split('|').forEach(cell => {
           html += `<td>${this.escapeHtml(cell.trim())}</td>`;
@@ -247,7 +268,6 @@ export class BotAssistantComponent {
     }
   }
 
-
   formatMessage(message: string): string {
     const escapedMessage = this.escapeHtml(message);
     return escapedMessage
@@ -258,7 +278,3 @@ export class BotAssistantComponent {
       .replace(/#/g, '');
   }
 }
-
-
-
-
